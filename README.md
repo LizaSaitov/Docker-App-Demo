@@ -1,5 +1,13 @@
 ## Container App
-lightweight Python Web Application containerized using Docker as part of the DevOps task requirements.
+Lightweight Python Web Application containerized using Docker.
+It serves HTTP requests on port 8080 and returns a response message whenever accessed.
+
+## Project Overview
+Project objectives:
+* Create a git repository
+* Create a python app that listens on a port and prints a message.
+* Create a docker image and conatiner
+
 
 ## Project Structure
 ```bash
@@ -27,7 +35,8 @@ lightweight Python Web Application containerized using Docker as part of the Dev
    ```bash
    docker run -p 8080:8080 docker_app 
    ```
- 
-## Test the Application
-Once the container is running, test it using the option below:
-Browser: Open http://localhost:8080
+4. Test the Application:
+   ```
+   Once the container is running, test it using the option below:
+   Browser: Open http://localhost:8080
+   ```
