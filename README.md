@@ -2,10 +2,13 @@
 lightweight Python Web Application containerized using Docker as part of the DevOps task requirements.
 
 ## Project Structure
-- `app.py`: Main Flask application handling HTTP requests.
-- `Dockerfile`: Instructions for building the container image.
-- `requirements.txt`: Python dependencies (`Flask`).
-- `README.md`: Project documentation and setup instructions.
+```bash
+.
+├── app.py           # Main Flask web application
+├── Dockerfile       # Container build instructions
+├── requirements.txt # Project Python dependencies
+└── README.md        # Project documentation
+```
 
 ## Prerequisites
 - Python 3.14.4
@@ -13,5 +16,18 @@ lightweight Python Web Application containerized using Docker as part of the Dev
 
 ## Local Setup
 1. Install dependencies locally:
-   At bash:
+   ```bash
    pip install -r requirements.txt
+   ```
+2. Build the Docker Image
+   ```bash
+   docker build -t docker_app . 
+   ```
+3. Run the Container
+   ```bash
+   docker run -p 8080:8080 docker_app 
+   ```
+ 
+## Test the Application
+Once the container is running, test it using the option below:
+Browser: Open http://localhost:8080
