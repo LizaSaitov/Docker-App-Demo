@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = 'docker-app-demo'
-        DOCKERHUB_USER = 'lizaliza'
+        DOCKERHUB_USER = 'lizaaliza'
     }
 
     stages {
