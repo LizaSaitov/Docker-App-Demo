@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = 'docker-app-demo'
-        DOCKERHUB_USER = 'lizasaitov'
+        DOCKERHUB_USER = 'lizaliza'
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying to Docker Hub...'
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-admin', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'liza-dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     sh '''
                         echo "$PASS" | docker login -u "$USER" --password-stdin
                         docker push ${DOCKERHUB_USER}/${APP_NAME}:${BUILD_NUMBER}
