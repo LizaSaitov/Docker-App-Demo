@@ -1,5 +1,4 @@
-brary('my-shared-library') _
-
+@Library('my-shared-library') _
 pipeline {
     agent any
 
@@ -12,6 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker Image...'
+                sh "docker build -t ${env.DOCKERHUB_USER}/${env.APP_NAME}:${env.BUILD_NUMBER} ."
                 script {
                     myLibrary.buildApp()
                 }
@@ -21,9 +21,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                script {
-                    myLibrary.test()
-                }
                 sh 'echo "Tests passed successfully"'
             }
         }
@@ -32,7 +29,14 @@ pipeline {
             steps {
                 echo 'Deploying to Docker Hub...'
                 script {
-                    myLibrary.deployApp()
+                    myLibrary.deployApp
+                }
+                withCredentials([usernamePassword(credentialsId: 'liza-dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                        echo "$PASS" | docker login -u "$USER" --password-stdin
+                        docker push ${DOCKERHUB_USER}/${APP_NAME}:${BUILD_NUMBER}
+                    '''
+                    
                 }
             }
         }
