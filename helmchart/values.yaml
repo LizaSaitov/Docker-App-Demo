@@ -2,12 +2,18 @@ database:
   dbname: db_mysql-test
   dbtable: liza
 pods: 
-  image: lizaaliza/myapp
+  image: lizaaliza/docker-app-demo
   tag: latest
+  pullPolicy: Always
 
 replicas: 2
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 8080
   targetport: 8080
+  
+ingress:
+  enabled: true
+  className: nginx
+  host: flask-app.local

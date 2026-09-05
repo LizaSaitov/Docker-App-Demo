@@ -18,5 +18,6 @@ spec:
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.pods.image }}:{{ .Values.pods.tag }}"
+          imagePullPolicy: {{ .Values.pods.pullPolicy | default "Always" }}
           ports:
             - containerPort: {{ .Values.service.targetport }}
