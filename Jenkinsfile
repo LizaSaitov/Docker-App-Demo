@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker Image...'
-                sh "docker build -t ${env.DOCKERHUB_USER}/${env.APP_NAME}:${env.BUILD_NUMBER} ."
+                sh "docker build -t ${env.DOCKERHUB_USER}/${env.APP_NAME}:${env.BUILD_NUMBER} -t ${env.DOCKERHUB_USER}/${env.APP_NAME}:latest ."
             }
         }
 
@@ -28,6 +28,7 @@ pipeline {
                     sh '''
                         echo "$PASS" | docker login -u "$USER" --password-stdin
                         docker push ${DOCKERHUB_USER}/${APP_NAME}:${BUILD_NUMBER}
+                	docker push ${DOCKERHUB_USER}/${APP_NAME}:latest
                     '''
                 }
             }
