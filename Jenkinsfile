@@ -42,6 +42,7 @@ pipeline {
                     passwordVariable: 'GIT_TOKEN' )]) 
                     {
                 sh '''
+		    rm -rf gitops
                     git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/Docker-App-Demo.git gitops
                     cd gitops
                     sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml
@@ -49,7 +50,7 @@ pipeline {
                     git config user.email "jenkins@user.com"
                     git add helmchart/values.yaml
                     git commit -m "Update image tag to ${BUILD_NUMBER} [skip ci]" || echo "Tag number updated"
-                    git push origin main
+                    git push https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git main
                 '''
             }
         }
