@@ -43,7 +43,7 @@ pipeline {
                     {
                 sh '''
 		    rm -rf gitops
-                    git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/Docker-App-Demo.git gitops
+                    git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git gitops
                     cd gitops
                     sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml
                     git config user.name "Jenkins User"
