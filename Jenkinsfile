@@ -33,5 +33,32 @@ pipeline {
                 }
             }
         }
+    stage('Update & Push GitOps') {
+        steps {
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'github-credentials', 
+                    usernameVariable: 'GIT_USER', 
+                    passwordVariable: 'GIT_TOKEN' )]) 
+                    {
+                sh '''
+                    git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/Docker-App-Demo.git gitops
+                    cd gitops
+
+                    # 2. Update the Docker tag inside Helm values file
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml
+
+                    # 3. Configure Git user
+                    git config user.name "Jenkins User"
+                    git config user.email "jenkins@user.com"
+
+                    # 4. Stage, commit, and push
+                    git add helmchart/values.yaml
+                    git commit -m "Update image tag to ${BUILD_NUMBER} [skip ci]" || echo "Tag number updated"
+                    git push origin main
+                '''
+            }
+        }
+    }
     }
 }
