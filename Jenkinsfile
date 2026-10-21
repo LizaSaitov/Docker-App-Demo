@@ -28,7 +28,7 @@ pipeline {
                     sh '''
                         echo "$PASS" | docker login -u "$USER" --password-stdin
                         docker push ${DOCKERHUB_USER}/${APP_NAME}:${BUILD_NUMBER}
-                	docker push ${DOCKERHUB_USER}/${APP_NAME}:latest
+                        docker push ${DOCKERHUB_USER}/${APP_NAME}:latest
                     '''
                 }
             }
@@ -42,13 +42,19 @@ pipeline {
                     passwordVariable: 'GIT_TOKEN' )]) 
                     {
                 sh '''
-		    rm -rf gitops
+                    rm -rf gitops
                     git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git gitops
                     cd gitops
-                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml 
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/env/dev/values.yaml
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/env/prd/values.yaml
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/env/qa/values.yaml
+                    helm template env-dev helmchart -f helmchart/env/dev/values.yaml
+                    helm template env-qa helmchart -f helmchart/env/qa/values.yaml
+                    helm template env-prd helmchart -f helmchart/env/prd/values.yaml
                     git config user.name "Jenkins User"
                     git config user.email "jenkins@user.com"
-                    git add helmchart/values.yaml
+                    git add helmchart/values.yaml helmchart/env/
                     git commit -m "Update image tag to ${BUILD_NUMBER} [skip ci]" || echo "Tag number updated"
                     git push https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git main
                 '''
@@ -57,3 +63,4 @@ pipeline {
     }
     }
 }
+ 
