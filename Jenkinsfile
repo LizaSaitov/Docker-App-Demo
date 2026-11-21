@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'APP_NAME', defaultValue: 'docker-app-demo', description: 'Application Name')
+        string(name: 'APP_PARM', defaultValue: 'docker-app-demo', description: 'Application Name')
     }
 
     environment {
+        APP_NAME = '${params.APP_PARM}'
         DOCKERHUB_USER = 'lizaaliza'
     }
 
@@ -13,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker Image...'
-                sh "docker build -t ${env.DOCKERHUB_USER}/${params.APP_NAME}:${env.BUILD_NUMBER} -t ${env.DOCKERHUB_USER}/${params.APP_NAME}:latest ."
+                sh "docker build -t ${env.DOCKERHUB_USER}/${env.APP_NAME}:${env.BUILD_NUMBER} -t ${env.DOCKERHUB_USER}/${env.APP_NAME}:latest ."
             }
         }
 
@@ -49,8 +50,8 @@ pipeline {
                     git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git gitops
                     cd gitops
                     sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml 
-                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/env/qa/${params.APP_NAME}.yaml
-                    helm template env-qa helmchart -f helmchart/env/qa/${params.APP_NAME}.yaml
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/env/qa/${APP_NAME}.yaml
+                    helm template env-qa helmchart -f helmchart/env/qa/${APP_NAME}.yaml
                     git config user.name "Jenkins User"
                     git config user.email "jenkins@user.com"
                     git add helmchart/values.yaml helmchart/env/qa
