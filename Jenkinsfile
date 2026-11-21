@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = '${params.APP_PARM}'
+        APP_NAME = "${params.APP_PARM}"
         DOCKERHUB_USER = 'lizaaliza'
     }
 
