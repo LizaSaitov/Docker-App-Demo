@@ -49,12 +49,13 @@ pipeline {
                     rm -rf gitops
                     git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git gitops
                     cd gitops
+                    cp -n env/qa/values.yaml env/qa/${APP_NAME}.yaml
                     sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/values.yaml 
-                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" helmchart/env/qa/${APP_NAME}.yaml
-                    helm template env-qa helmchart -f helmchart/env/qa/${APP_NAME}.yaml
+                    sed -i "s/tag: .*/tag: \"${BUILD_NUMBER}\"/" env/qa/${APP_NAME}.yaml
+                    helm template env-qa helmchart -f env/qa/${APP_NAME}.yaml
                     git config user.name "Jenkins User"
                     git config user.email "jenkins@user.com"
-                    git add helmchart/values.yaml helmchart/env/qa
+                    git add helmchart/values.yaml env/qa
                     git commit -m "Update image tag to ${BUILD_NUMBER} [skip ci]" || echo "Tag number updated"
                     git push https://${GIT_USER}:${GIT_TOKEN}@github.com/LizaSaitov/GitOps-Project.git main
                 '''
